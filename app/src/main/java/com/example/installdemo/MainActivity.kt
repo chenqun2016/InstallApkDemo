@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.PathUtils
 import com.yanzhenjie.permission.AndPermission
@@ -34,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.tv_2).setOnClickListener {
             doOther(1)
         }
+        findViewById<View>(R.id.tv_3).setOnClickListener {
+            doOther(3)
+        }
         AndPermission.with(this)
             .runtime()
             .permission(Permission.WRITE_EXTERNAL_STORAGE,
@@ -50,13 +54,17 @@ class MainActivity : AppCompatActivity() {
         File(s).mkdirs()
         val s1 = s + "a.apk"
         copyAssetsFile(this,"aaa.apk",s1)
-        if(type == 1){
+
+        val des = File(s1)
+        if(type == 0){
+            Update(des,this)
+        }else if(type == 1){
             AndPermission.with(this)
                 .install()
-                .file(File(s1))
+                .file(des)
                 .start()
         }else{
-            Update(File(s1),this)
+            AppUtils.installApp(des)
         }
 
 //        openApk(Uri.parse(s1),this)
